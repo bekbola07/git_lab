@@ -33,6 +33,7 @@ for (x, y, w, h) in faces:
     (h_img, w_img) = img.shape[:2]
     M = cv2.getRotationMatrix2D((w_img//2, h_img//2), angle, 1.0)
     rotated = cv2.warpAffine(img, M, (w_img, h_img))
+    # uzgarishlar git asoslari fani uchun
     cv2.imwrite("togrilangan.jpg", rotated)
     cv2.imshow("Tekislangan rasm", rotated)
     cv2.waitKey(0)

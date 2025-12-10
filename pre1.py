@@ -6,11 +6,13 @@ import math
 img = cv2.imread("img.png")
 #Yuzi aniqlash uchun Haarcascade
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+# uzgarishlar git asoslari fani uchun
 eyes_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 faces = face_cascade.detectMultiScale(gray, 1.1, 4)
 for (x, y, w, h) in faces:
     roi_gray = gray[y:y+h, x:x+w]
+    # uzgarishlar git asoslari fani uchun
     roi_color = img[y:y+h, x:x+w]
     eyes = eyes_cascade.detectMultiScale(roi_gray)
     if len(eyes) >= 2:
@@ -24,6 +26,9 @@ for (x, y, w, h) in faces:
     x2 = x + eye2[0] + eye2[2]//2
     y2 = y + eye2[1] + eye2[3]//2
     # Burchakni hisoblash
+    # uzgarishlar git asoslari fani uchun
+    # uzgarishlar git asoslari fani uchun
+    # uzgarishlar git asoslari fani uchun
     dx = x2-x1
     dy=y2-y1
     angle = math.degrees(math.atan2(dy, dx))

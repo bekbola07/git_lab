@@ -82,6 +82,7 @@ with mp_face_mesh.FaceMesh(
                 # Scale faktorini pitchga qarab hisoblash (masalan ±15° da ±10% zoom)
                 max_pitch = 30  # ° maksimal pitch
                 scale = 1.0 + 0.1 * np.clip(-pitch / max_pitch, -1, 1)  # pitch yuqoriga bo'lsa kattalashtiradi
+                # uzgarishlar git asoslari fani uchun
                 S = np.array([[scale, 0, center[0] * (1 - scale)],
                               [0, scale, center[1] * (1 - scale)],
                               [0, 0, 1]])
