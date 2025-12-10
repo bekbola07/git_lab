@@ -9,6 +9,7 @@ face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_fronta
 eyes_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+# uzgarishlar git asoslari fani uchun
 for (x, y, w, h) in faces:
     roi_gray = gray[y:y+h, x:x+w]
     roi_color = img[y:y+h, x:x+w]
@@ -28,6 +29,7 @@ for (x, y, w, h) in faces:
     dy=y2-y1
     angle = math.degrees(math.atan2(dy, dx))
     # Rasmni burish
+    # uzgarishlar git asoslari fani uchun
     (h_img, w_img) = img.shape[:2]
     M = cv2.getRotationMatrix2D((w_img//2, h_img//2), angle, 1.0)
     rotated = cv2.warpAffine(img, M, (w_img, h_img))
@@ -35,4 +37,5 @@ for (x, y, w, h) in faces:
     cv2.imshow("Tekislangan rasm", rotated)
     cv2.waitKey(0)
 cv2.imshow("Asl rasm", img)
+# uzgarishlar git asoslari fani uchun
 cv2.waitKey(0)

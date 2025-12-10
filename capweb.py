@@ -8,6 +8,7 @@ mp_drawing = mp.solutions.drawing_utils
 
 cap = cv2.VideoCapture(0)
 
+# uzgarishlar git asoslari fani uchun
 # 3D model points (faqat pitch uchun kerakli landmarklar)
 model_points = np.array([
     (0.0, 0.0, 0.0),             # burun uchi
@@ -87,6 +88,7 @@ with mp_face_mesh.FaceMesh(
 
                 H = S @ camera_matrix @ R_x[:, :3] @ np.linalg.inv(camera_matrix)
                 aligned_img = cv2.warpPerspective(aligned_img, H, (img_w, img_h))
+        # uzgarishlar git asoslari fani uchun
 
         cv2.imshow("Webkamera", img)
         cv2.imshow("Aligned Face (Pitch Only)", aligned_img)
