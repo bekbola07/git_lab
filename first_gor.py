@@ -5,9 +5,9 @@ img = cv2.imread("img.png")
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 kernel_v = np.array( [
+[-1, -1, -1],
 [-1, 0, 1],
-[-1, 0, 1],
-[-1, 0, 1]
+[1, 1, 1]
 ], dtype=np.float32)
 
 vert = cv2.filter2D(gray, -1, kernel_v)
