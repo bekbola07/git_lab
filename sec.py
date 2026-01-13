@@ -1,61 +1,37 @@
 import cv2
 import numpy as np
-import math
 
-# Rasmni yuklash
-img = cv2.imread("img.png")
+cap = cv2.VideoCapture(0)
 
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-eyes_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_eye.xml")
+if not cap.isOpened():
+    print("Kamera ochilmadi")
+    exit()
 
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+kernel_roberts_x = np.array([[1, 0],
+                             [0, -1]], dtype=np.float32)
 
-faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+kernel_roberts_y = np.array([[0, 1],
+                             [-1, 0]], dtype=np.float32)
 
-for (x, y, w, h) in faces:
-    roi_gray = gray[y:y+h, x:x+w]
-    eyes = eyes_cascade.detectMultiScale(roi_gray)
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
 
-    if len(eyes) >= 2:
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        # faqat 2 ta ko'zni olamiz
-        eye1 = eyes[0]
-        eye2 = eyes[1]
+    gx = cv2.filter2D(gray, cv2.CV_32F, kernel_roberts_x)
+    gy = cv2.filter2D(gray, cv2.CV_32F, kernel_roberts_y)
 
-        # ko'z markazlari
-        x1 = x + eye1[0] + eye1[2] // 2
-        y1 = y + eye1[1] + eye1[3] // 2
+    edge = cv2.sqrt(gx * gx + gy * gy)
+    edge = cv2.convertScaleAbs(edge)
 
-        x2 = x + eye2[0] + eye2[2] // 2
-        y2 = y + eye2[1] + eye2[3] // 2
+    result = 255 - edge
 
-        # chap va o‘ng bo‘lishi uchun tartiblash
-        if x1 > x2:
-            x1, x2 = x2, x1
-            y1, y2 = y2, y1
+    cv2.imshow("Roberts algoritmi (Webcam)", result)
 
-        # Burchakni hisoblash
-        dx = x2 - x1
-        dy = y2 - y1
-        angle = math.degrees(math.atan2(dy, dx))
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-        # teskari burilishlarga yo‘l qo‘ymaslik
-        if angle > 45:
-            angle -= 90
-        elif angle < -45:
-            angle += 90
-
-        # Rasmni aylantirish
-        (h_img, w_img) = img.shape[:2]
-        M = cv2.getRotationMatrix2D((w_img // 2, h_img // 2), angle, 1.0)
-        rotated = cv2.warpAffine(img, M, (w_img, h_img))
-
-        # saqlash va ko‘rsatish
-        cv2.imwrite("img12.png", rotated)
-        cv2.imshow("Natija", rotated)
-        cv2.waitKey(0)
-
-# asl rasmni ko‘rsatish
-cv2.imshow("Asl rasm", img)
-cv2.waitKey(0)
+cap.release()
 cv2.destroyAllWindows()
